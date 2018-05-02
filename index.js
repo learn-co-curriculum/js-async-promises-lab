@@ -1,59 +1,60 @@
-const questions = [
-  {questionText: "Lightning never strikes in the same place twice", answer: false},
-  {questionText: "Humans can distinguish between over one trillion different smells", answer: true},
-  {questionText: "Goldfish only have a memory of about three seconds", answer: false}
-]
-
-let question;
-function askQuestion(){
-  return questions[0]
+// get a random question
+function getQuestion(questions) {
+  return questions[Math.floor(Math.random() * questions.length)];
 }
 
-function displayQuestionOnClick(){
-  let btn = document.querySelector('a')
-  return btn.addEventListener('click', () => {
-    toggleTrueAndFalseButtons()
-    askQuestionThenRemoveQuestion(5000)
-  })
+function trueAndFalseButtons() {
+  return (btns = document
+    .querySelector(".true-false-list")
+    .querySelectorAll(".btn"));
 }
 
-function trueAndFalseButtons(){
-  return btns = document.querySelector('.true-false-list').querySelectorAll('.btn')
+function showTrueAndFalseButtons() {
+  trueAndFalseButtons().forEach(function(btn) {
+    btn.classList.remove("hide");
+  });
 }
 
-function toggleTrueAndFalseButtons(){
-  trueAndFalseButtons().forEach(function(btn){
-    btn.classList.toggle("hide")
-  })
+function hideTrueAndFalseButtons() {
+  trueAndFalseButtons().forEach(function(btn) {
+    btn.classList.add("hide");
+  });
 }
 
-function checkQuestion(question, answer){
-  question.questionAnswer == answer
+function checkQuestion(question, answer) {
+  question.questionAnswer == answer;
 }
 
-function askQuestionThen(time){
-  question = questions[0]
-  appendQuestion(question)
-  return new Promise(function(resolve){
-    setTimeout(function(){
-      resolve(question)
-    }, time)
-  })
-}
-
-function appendQuestion(question){
-  let container = document.querySelector('.question-container')
+function appendQuestion(question) {
+  let container = document.querySelector(".question-container");
   container.innerHTML = question.questionText;
 }
 
-function removeQuestion(){
-  return new Promise(function(){
-    let container = document.querySelector('.question-container')
-    container.innerHTML = ''
-    toggleTrueAndFalseButtons()
-  })
+function removeQuestion() {
+  let container = document.querySelector(".question-container");
+  container.innerHTML = "";
 }
 
-function askQuestionThenRemoveQuestion(time){
-  return askQuestionThen(time).then(removeQuestion)
+function askQuestionThen(question, time) {
+  appendQuestion(question);
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve(question);
+    }, time);
+  });
+}
+
+function askQuestionThenRemoveQuestion(questions, time) {
+  let question = getQuestion(questions);
+  return askQuestionThen(question, time).then(removeQuestion);
+}
+
+function attachAskAwayListener() {
+  let btn = document.querySelector("#ask-away");
+  return btn.addEventListener("click", () => {
+    showTrueAndFalseButtons();
+    askQuestionThenRemoveQuestion(questions, 5000).then(
+      hideTrueAndFalseButtons
+    );
+  });
 }
