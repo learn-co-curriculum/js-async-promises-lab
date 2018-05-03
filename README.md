@@ -25,6 +25,7 @@ There are number of functions that we need to build to get the quiz game to work
 + `addQuestionListener` - adds a listener to the true-false buttons
 + `askQuestion(time)` - returns a promise that is resolved after a specified amount of time (so that we can expire the question after 5 seconds); the amount of time to wait is provided as an argument to the function
 + `askQuestionThenRemoveQuestion(time)` - it appends the question to the "question-container" and after a specified amount of time removes the question; it takes an argument of "time" indicating the amount of time the question will be displayed
++ `checkQuestion(question, answer)` - takes a question and an answer, and returns true if the answer is correct, false if the question is incorrect.
 + `attachAskAwayListener`  - adds a click event listener to the ask away button so that clicking the button adds the true and false buttons, shows a question for five seconds, then hides the question, then hides the true and false buttons
 
 ## Hints

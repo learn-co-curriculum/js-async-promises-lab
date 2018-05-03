@@ -36,6 +36,9 @@ describe("index", () => {
   afterEach(function() {
     // restore original random, if it's been mocked
     Math.random.restore && Math.random.restore();
+    questionContainer.innerHTML = "";
+    hideTrueAndFalseButtons && hideTrueAndFalseButtons();
+    trueAndFalseButtons();
   });
 
   describe("getQuestion", () => {
@@ -169,6 +172,22 @@ describe("index", () => {
     });
   });
 
+  describe("checkQuestion", function() {
+    it("returns true if the answer is correct", function() {
+      questions.forEach(question => {
+        expect(checkQuestion(question, question.questionAnswer)).to.equal(true);
+      });
+    });
+
+    it("returns false if the answer is incorrect", function() {
+      questions.forEach(question => {
+        expect(checkQuestion(question, !question.questionAnswer)).to.equal(
+          false
+        );
+      });
+    });
+  });
+
   describe("attachAskAwayListener", function() {
     let event;
     let clock;
@@ -190,8 +209,8 @@ describe("index", () => {
       clock.restore();
     });
 
-    it("it displays the question for after a click event to the button", function() {
-      attachAskAwayListener();
+    it("it displays the question for after a click event to the button", function(done) {
+      attachAskAwayListener(questions);
       let btn = document.querySelector(".btn");
       btn.dispatchEvent(event);
       expect(questionContainer.innerHTML).to.eq(
@@ -200,7 +219,7 @@ describe("index", () => {
     });
 
     it("also displays the true and false buttons", function() {
-      attachAskAwayListener();
+      attachAskAwayListener(questions);
       let btn = document.querySelector("a.btn");
       btn.dispatchEvent(event);
       let btns = document

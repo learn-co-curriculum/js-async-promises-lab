@@ -21,10 +21,6 @@ function hideTrueAndFalseButtons() {
   });
 }
 
-function checkQuestion(question, answer) {
-  question.questionAnswer == answer;
-}
-
 function appendQuestion(question) {
   let container = document.querySelector(".question-container");
   container.innerHTML = question.questionText;
@@ -49,9 +45,31 @@ function askQuestionThenRemoveQuestion(questions, time) {
   return askQuestionThen(question, time).then(removeQuestion);
 }
 
-function attachAskAwayListener() {
+function checkQuestion(question, answer) {
+  return question.questionAnswer == answer;
+}
+
+function getBooleanFromButton(button) {
+  return button.innerHTML === " True ";
+}
+
+function attachQuestionListeners(question) {
+  trueAndFalseButtons().forEach(btn => {
+    btn.addEventListener("click", e => {
+      hideTrueAndFalseButtons();
+      let answer = getBooleanFromButton(e.target);
+      if (checkQuestion(question, answer)) {
+        alert("You got it!");
+      } else {
+        alert("Nope!");
+      }
+    });
+  });
+}
+
+function attachAskAwayListener(questions) {
   let btn = document.querySelector("#ask-away");
-  return btn.addEventListener("click", () => {
+  return btn.addEventListener("click", function() {
     showTrueAndFalseButtons();
     askQuestionThenRemoveQuestion(questions, 5000).then(
       hideTrueAndFalseButtons
